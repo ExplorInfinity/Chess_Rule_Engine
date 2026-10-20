@@ -11,4 +11,4 @@ interface GameSpecialRights {
     enPassantFile: number | null
 }
 
-export { GameOutcome, GameSpecialRights };
+export type { GameOutcome, GameSpecialRights };

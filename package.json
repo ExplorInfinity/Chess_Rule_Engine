@@ -1,6 +1,6 @@
 {
-  "name": "chess-rule-engine",
-  "version": "1.0.0",
+  "name": "chess_rule_engine",
+  "version": "0.1.0",
   "description": "TypeScript chess rules engine",
   "private": false,
   "type": "module",
@@ -16,7 +16,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc"
+    "build": "tsc -p tsconfig.json"
   },
   "keywords": [
     "chess",

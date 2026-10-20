@@ -2,13 +2,13 @@ import type {Position, MoveRecord, MoveQuery, MoveRemark, LegalPosition, StaticM
 import type {PieceColor, PieceNameCode} from "./types/piece";
 import {Board, BoardChange, BoardStringLayout} from "./board";
 import {ChessRuleSet} from "./chessRuleSet";
-import {King, Pawn, Piece} from "./pieces";
+import {King, Pawn} from "./pieces";
 import {switchColor} from "./utils/color";
-import {GameStatus, GameResult, BOARD_SIZE, DefaultBoard} from "./constants/game";
-import {CastleType} from "./constants/castleType";
-import {GameOutcome, GameSpecialRights} from "./types/game";
+import {GameStatus, GameResult, BOARD_SIZE, DefaultBoard} from "./constants";
+import {CastleType} from "./constants";
+import type {GameOutcome, GameSpecialRights} from "./types";
 import {ZobristUpdater} from "./hashing/zobristUpdater";
-import {PieceClassMap, PieceCode} from "./constants/piece";
+import {PieceClassMap, PieceCode} from "./constants";
 
 type BoardChangeOptions = {
     updateGameHash?: boolean;
@@ -422,5 +422,5 @@ class Game
 }
 
 export { Game };
-export type { GameOutcome, GameSpecialRights } from "./types/game";
+export type { GameOutcome, GameSpecialRights } from "./types/game"
 export { GameStatus, GameResult, BOARD_SIZE, DefaultBoard } from "./constants/game";

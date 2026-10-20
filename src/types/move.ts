@@ -1,7 +1,6 @@
-import type {BoardChange, CaptureChange, MoveChange, PromotionChange} from "./board";
-import {PieceColor, type PieceName, type PieceNameCode} from "./piece";
+import type {CaptureChange, MoveChange, PromotionChange} from "./board";
+import type {PieceColor, PieceNameCode} from "./piece";
 import {Game} from "../game";
-import {Piece} from "../pieces";
 
 type MoveConditionFunction = (game: Game, pos: Position) => boolean;
 type OnMove = (game: Game, moveQuery: MoveQuery<Position>, moveRecord: MoveRecord) => void;
