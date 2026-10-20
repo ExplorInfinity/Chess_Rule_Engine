@@ -1,10 +1,30 @@
 {
-  "name": "chess_rule_engine",
+  "name": "chess-rule-engine",
   "version": "1.0.0",
-  "description": "",
-  "private": true,
-  "keywords": [],
-  "author": "",
+  "description": "TypeScript chess rules engine",
+  "private": false,
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc"
+  },
+  "keywords": [
+    "chess",
+    "chess-rule-engine",
+    "typescript"
+  ],
   "license": "ISC",
-  "type": "module"
+  "devDependencies": {
+    "typescript": "^7.0.2"
+  }
 }
