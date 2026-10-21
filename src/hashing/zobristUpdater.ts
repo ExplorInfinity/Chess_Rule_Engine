@@ -1,7 +1,6 @@
-import {Board} from "../board.js";
 import {Zobrist, type Hash} from "./zobrist.js";
-import {Game} from "../game.js";
-import type {GameSpecialRights, MoveRecord} from "../types/index.js";
+import type {GameContext, GameSpecialRights} from "../types/game.js";
+import type {MoveRecord} from "../types/move.js";
 import type {PieceColor} from "../types/piece.js";
 
 type HashMap = Map<Hash, number[]>;
@@ -16,7 +15,7 @@ class ZobristUpdater
     public get currentHash(): Readonly<Hash> { return this._currentHash; }
 
     // Update Hash Methods
-    public rebuildHash(game: Game)
+    public rebuildHash(game: GameContext)
     {
         this._hashMap.clear();
         this._currentHash = Zobrist.getBoardHash(game);
@@ -49,7 +48,7 @@ class ZobristUpdater
         this._currentHash = Zobrist.toggleSpecialRights(specialRights, this._currentHash);
     }
 
-    public addMoveRecord(game: Game, moveRecordIndex: number)
+    public addMoveRecord(game: GameContext, moveRecordIndex: number)
     {
         if (moveRecordIndex < 0 || moveRecordIndex >= game.moveHistory.length)
             return;
@@ -72,7 +71,7 @@ class ZobristUpdater
         this.recordCurrentHashOccurrence(moveRecordIndex);
     }
 
-    public removeMoveRecord(game: Game, moveRecordIndex: number)
+    public removeMoveRecord(game: GameContext, moveRecordIndex: number)
     {
         if (moveRecordIndex < 0 || moveRecordIndex >= game.moveHistory.length)
             return;
@@ -121,14 +120,14 @@ class ZobristUpdater
         if (indexes) this._hashMap.set(this._currentHash, indexes);
     }
 
-    public checkThreeFoldRepetition(game: Game)
+    public checkThreeFoldRepetition(game: GameContext)
     {
         const occurrences = this._hashMap.get(this._currentHash);
         if (!occurrences || occurrences.length < 3)
             return false;
 
         // Current Position Snapshot
-        const currentBoard: Board = game.board.copyBoard();
+        const currentBoard = game.board.copyBoard();
         const currentTurnColor: PieceColor = game.currentTurnColor;
         const currentSpecialRights: GameSpecialRights = {
             castlingRights: { ...game.specialRights.castlingRights },
@@ -136,7 +135,7 @@ class ZobristUpdater
         };
 
         // Comparing all positions
-        const matches: boolean[] = game.evaluateAt(occurrences, (game: Game) => {
+        const matches: boolean[] = game.evaluateAt(occurrences, (game: GameContext) => {
             game.updateSpecialRights();
             return game.isSamePosition(currentBoard, currentTurnColor, currentSpecialRights);
         });

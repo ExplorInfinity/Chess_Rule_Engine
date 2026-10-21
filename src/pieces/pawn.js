@@ -1,0 +1,90 @@
+import { Piece } from "./piece.js";
+import { ChessRuleSet } from "../chessRuleSet.js";
+import { BOARD_SIZE } from "../constants/game.js";
+import { getColorMultiplier } from "../utils/color.js";
+const DoubleStepMoveCondition = (game, pos) => {
+    const pawn = game.board.getAtPos(pos);
+    if (!pawn || pawn.name !== "pawn" || pawn.isMoved)
+        return false;
+    const multiplier = getColorMultiplier(pawn.color);
+    return ChessRuleSet.isPathClear(game, pos, { x: pos.x, y: pos.y + 2 * multiplier });
+};
+const LeftCaptureCondition = (game, pos) => {
+    const pawn = game.board.getAtPos(pos);
+    if (!pawn || pawn.name !== "pawn" || pos.x === 0)
+        return false;
+    const y = pos.y + 1 * getColorMultiplier(pawn.color);
+    const x = pos.x - 1;
+    const capture = game.board.positionMap[y][x];
+    return (capture !== null && capture.color !== pawn.color);
+};
+const RightCaptureCondition = (game, pos) => {
+    const pawn = game.board.getAtPos(pos);
+    if (!pawn || pawn.name !== "pawn" || pos.x === game.board.boardSize - 1)
+        return false;
+    const y = pos.y + 1 * getColorMultiplier(pawn.color);
+    const x = pos.x + 1;
+    const capture = game.board.positionMap[y][x];
+    return (capture !== null && capture.color !== pawn.color);
+};
+const LeftSideEnPassantCondition = (game, pos) => {
+    const pawn = game.board.getAtPos(pos);
+    if (!pawn || pawn.name !== "pawn" || pos.x === 0)
+        return false;
+    const capturePawn = game.board.positionMap[pos.y][pos.x - 1];
+    if (!capturePawn || capturePawn.name !== "pawn" || capturePawn.color === pawn.color)
+        return false;
+    const lastMove = game.lastMoveRecord?.moves[0];
+    return (lastMove !== undefined && lastMove.piece === capturePawn && Math.abs(lastMove.from.y - lastMove.to.y) === 2);
+};
+const RightSideEnPassantCondition = (game, pos) => {
+    const pawn = game.board.getAtPos(pos);
+    if (!pawn || pawn.name !== "pawn" || pos.x === game.board.boardSize - 1)
+        return false;
+    const capturePawn = game.board.positionMap[pos.y][pos.x + 1];
+    if (!capturePawn || capturePawn.name !== "pawn" || capturePawn.color === pawn.color)
+        return false;
+    const lastMove = game.lastMoveRecord?.moves[0];
+    return (lastMove !== undefined && lastMove.piece === capturePawn && Math.abs(lastMove.from.y - lastMove.to.y) === 2);
+};
+const OnLeftSideEnPassant = (game, moveQuery, moveRecord) => {
+    const { from } = moveQuery;
+    const capturePawnPos = { x: from.x - 1, y: from.y };
+    game.addCapture(moveRecord, capturePawnPos);
+};
+const OnRightSideEnPassant = (game, moveQuery, moveRecord) => {
+    const { from } = moveQuery;
+    const capturePawnPos = { x: from.x + 1, y: from.y };
+    game.addCapture(moveRecord, capturePawnPos);
+};
+const HandlePromotion = (game, moveQuery, moveRecord) => {
+    const { from, to } = moveQuery;
+    const pawn = game.board.getAtPos(from);
+    const promotionRank = pawn.color === "white" ? 0 : BOARD_SIZE - 1;
+    if (to.y === promotionRank)
+        game.addPromotion(moveRecord, moveQuery.to, pawn.color, moveQuery.promoteTo ?? null);
+};
+const PawnMoves = [
+    { vec: { dx: 0, dy: 1 }, isSliding: false, canAttack: false, onMove: HandlePromotion },
+    { vec: { dx: 0, dy: 2 }, isSliding: false, canAttack: false, condition: DoubleStepMoveCondition }, // Double Step Move
+    { vec: { dx: -1, dy: 1 }, isSliding: false, canAttack: true, condition: LeftCaptureCondition, onMove: HandlePromotion }, // Left Capture
+    { vec: { dx: 1, dy: 1 }, isSliding: false, canAttack: true, condition: RightCaptureCondition, onMove: HandlePromotion }, // Right Capture
+    { vec: { dx: -1, dy: 1 }, isSliding: false, canAttack: false, condition: LeftSideEnPassantCondition, onMove: OnLeftSideEnPassant }, // Left EnPassant
+    { vec: { dx: 1, dy: 1 }, isSliding: false, canAttack: false, condition: RightSideEnPassantCondition, onMove: OnRightSideEnPassant }, // Right EnPassant
+];
+class Pawn extends Piece {
+    static moves = PawnMoves;
+    constructor(color) {
+        super(color, "pawn");
+    }
+    getMoves() {
+        return Pawn.moves;
+    }
+    static isLeftEnPassantLegal(game, pos) {
+        return LeftSideEnPassantCondition(game, pos);
+    }
+    static isRightEnPassantLegal(game, pos) {
+        return RightSideEnPassantCondition(game, pos);
+    }
+}
+export { Pawn };

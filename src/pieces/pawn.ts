@@ -1,12 +1,11 @@
 import {Piece} from "./piece.js";
-import {Game} from "../game.js";
 import {ChessRuleSet} from "../chessRuleSet.js";
-import {BOARD_SIZE} from "../constants/index.js";
+import {BOARD_SIZE} from "../constants/game.js";
 import {getColorMultiplier} from "../utils/color.js";
 import type {PieceColor} from "../types/piece.js";
-import type {MoveConditionFunction, Move, Position, OnMove, MoveRecord, MoveQuery} from "../types/index.js";
+import type {MoveConditionFunction, Move, Position, OnMove, MoveRecord, MoveQuery, MoveGameContext, MoveExecutionContext} from "../types/move.js";
 
-const DoubleStepMoveCondition: MoveConditionFunction = (game: Game, pos: Position) => {
+const DoubleStepMoveCondition: MoveConditionFunction = (game: MoveGameContext, pos: Position) => {
     const pawn = game.board.getAtPos(pos);
     if (!pawn || pawn.name !== "pawn" || pawn.isMoved)
         return false;
@@ -15,7 +14,7 @@ const DoubleStepMoveCondition: MoveConditionFunction = (game: Game, pos: Positio
     return ChessRuleSet.isPathClear(game, pos, { x: pos.x, y: pos.y + 2 * multiplier });
 }
 
-const LeftCaptureCondition: MoveConditionFunction = (game: Game, pos: Position) => {
+const LeftCaptureCondition: MoveConditionFunction = (game: MoveGameContext, pos: Position) => {
     const pawn = game.board.getAtPos(pos);
     if (!pawn || pawn.name !== "pawn" || pos.x === 0)
         return false;
@@ -26,7 +25,7 @@ const LeftCaptureCondition: MoveConditionFunction = (game: Game, pos: Position) 
     return (capture !== null && capture.color !== pawn.color);
 }
 
-const RightCaptureCondition: MoveConditionFunction = (game: Game, pos: Position) => {
+const RightCaptureCondition: MoveConditionFunction = (game: MoveGameContext, pos: Position) => {
     const pawn = game.board.getAtPos(pos);
     if (!pawn || pawn.name !== "pawn" || pos.x === game.board.boardSize-1)
         return false;
@@ -37,7 +36,7 @@ const RightCaptureCondition: MoveConditionFunction = (game: Game, pos: Position)
     return (capture !== null && capture.color !== pawn.color);
 }
 
-const LeftSideEnPassantCondition: MoveConditionFunction = (game: Game, pos: Position) => {
+const LeftSideEnPassantCondition: MoveConditionFunction = (game: MoveGameContext, pos: Position) => {
     const pawn = game.board.getAtPos(pos);
     if (!pawn || pawn.name !== "pawn" || pos.x === 0)
         return false;
@@ -50,7 +49,7 @@ const LeftSideEnPassantCondition: MoveConditionFunction = (game: Game, pos: Posi
     return (lastMove !== undefined && lastMove.piece === capturePawn && Math.abs(lastMove.from.y - lastMove.to.y) === 2);
 }
 
-const RightSideEnPassantCondition: MoveConditionFunction = (game: Game, pos: Position) => {
+const RightSideEnPassantCondition: MoveConditionFunction = (game: MoveGameContext, pos: Position) => {
     const pawn = game.board.getAtPos(pos);
     if (!pawn || pawn.name !== "pawn" || pos.x === game.board.boardSize-1)
         return false;
@@ -63,19 +62,19 @@ const RightSideEnPassantCondition: MoveConditionFunction = (game: Game, pos: Pos
     return (lastMove !== undefined && lastMove.piece === capturePawn && Math.abs(lastMove.from.y - lastMove.to.y) === 2);
 }
 
-const OnLeftSideEnPassant: OnMove = (game: Game, moveQuery: MoveQuery<Position>, moveRecord: MoveRecord)=> {
+const OnLeftSideEnPassant: OnMove = (game: MoveExecutionContext, moveQuery: MoveQuery<Position>, moveRecord: MoveRecord)=> {
     const { from } = moveQuery;
     const capturePawnPos: Position = { x: from.x - 1, y: from.y };
     game.addCapture(moveRecord, capturePawnPos);
 }
 
-const OnRightSideEnPassant: OnMove = (game: Game, moveQuery: MoveQuery<Position>, moveRecord: MoveRecord)=> {
+const OnRightSideEnPassant: OnMove = (game: MoveExecutionContext, moveQuery: MoveQuery<Position>, moveRecord: MoveRecord)=> {
     const { from } = moveQuery;
     const capturePawnPos: Position = { x: from.x + 1, y: from.y };
     game.addCapture(moveRecord, capturePawnPos);
 }
 
-const HandlePromotion: OnMove = (game: Game, moveQuery: MoveQuery<Position>, moveRecord: MoveRecord) => {
+const HandlePromotion: OnMove = (game: MoveExecutionContext, moveQuery: MoveQuery<Position>, moveRecord: MoveRecord) => {
     const { from, to } = moveQuery;
     const pawn = game.board.getAtPos(from) as Piece;
 
@@ -109,12 +108,12 @@ class Pawn extends Piece
         return Pawn.moves;
     }
 
-    public static isLeftEnPassantLegal(game: Game, pos: Position)
+    public static isLeftEnPassantLegal(game: MoveGameContext, pos: Position)
     {
         return LeftSideEnPassantCondition(game, pos);
     }
 
-    public static isRightEnPassantLegal(game: Game, pos: Position)
+    public static isRightEnPassantLegal(game: MoveGameContext, pos: Position)
     {
         return RightSideEnPassantCondition(game, pos);
     }

@@ -1,10 +1,12 @@
-import {King, Pawn, Piece} from "../pieces/index.js";
-import {Game} from "../game.js";
-import {BOARD_SIZE, CastleType} from "../constants/index.js";
+import {King, Pawn} from "../pieces/index.js";
+import {BOARD_SIZE} from "../constants/game.js";
+import {CastleType} from "../constants/castleType.js";
 import {PieceType} from "../constants/piece.js";
 import {SplitMix64} from "../utils/splitMix64.js";
-import type {PieceColor} from "../types/piece.js";
-import type {GameSpecialRights, Position, SoftFixedArray, SoftFixedArrayGrid} from "../types/index.js";
+import type {PieceColor, PieceLike} from "../types/piece.js";
+import type {GameSpecialRights, GameContext} from "../types/game.js";
+import type {Position} from "../types/move.js";
+import type {SoftFixedArray, SoftFixedArrayGrid} from "../types/util.js";
 
 type Hash = bigint;
 
@@ -40,12 +42,12 @@ class Zobrist
         Zobrist._enPassantFile = Array.from({ length: BOARD_SIZE }, () => Zobrist.rng.next()) as BoardFiles;
     }
 
-    public static getPieceIndex(piece: Piece)
+    public static getPieceIndex(piece: PieceLike)
     {
         return (piece.color === "black" ? 6 : 0) + PieceType[piece.name];
     }
 
-    public static getBoardHash(game: Game): Hash
+    public static getBoardHash(game: GameContext): Hash
     {
         let hash: Hash = Zobrist._sideToMove[game.currentTurnColor];
 
@@ -90,7 +92,7 @@ class Zobrist
         return hash;
     }
 
-    public static togglePieceAtPos(piece: Piece, pos: Position, hash: Hash)
+    public static togglePieceAtPos(piece: PieceLike, pos: Position, hash: Hash)
     {
         hash ^= Zobrist._pieceSquareHashMap[Zobrist.getPieceIndex(piece)][pos.y][pos.x];
         return hash;
@@ -145,4 +147,5 @@ class Zobrist
 
 Zobrist.initializeValues();
 
-export { Hash, Zobrist };
+export { Zobrist };
+export type { Hash };

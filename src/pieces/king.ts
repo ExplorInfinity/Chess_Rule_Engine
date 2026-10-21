@@ -1,12 +1,11 @@
-import type {Move, MoveConditionFunction, Position, OnMove, MoveRecord, MoveQuery} from "../types/index.js";
+import type {Move, MoveConditionFunction, Position, OnMove, MoveRecord, MoveQuery, MoveGameContext, MoveExecutionContext} from "../types/move.js";
 import type {Rook} from "./rook.js";
 import type {PieceColor} from "../types/piece.js";
-import {Game} from "../game.js";
 import {Piece} from "./piece.js";
 import {ChessRuleSet} from "../chessRuleSet.js";
 import {checkPieceName} from "../utils/piece.js";
 
-const ShortCastleCondition: MoveConditionFunction = (game: Game, pos: Position) => {
+const ShortCastleCondition: MoveConditionFunction = (game: MoveGameContext, pos: Position) => {
     const { board } = game;
     const king = board.getAtPos(pos);
     const rook = board.positionMap[pos.y][board.boardSize-1];
@@ -23,7 +22,7 @@ const ShortCastleCondition: MoveConditionFunction = (game: Game, pos: Position) 
     for(let dx = 1; dx <= 2; ++dx) {
         const isKingInCheck = game.evaluateAndBacktrack(
             { from: pos, to: { x: pos.x + dx, y: pos.y } },
-            (game: Game): boolean => ChessRuleSet.isKingInCheck(game, king.color)
+            (game: MoveGameContext): boolean => ChessRuleSet.isKingInCheck(game, king.color)
         );
 
         if (isKingInCheck) return false;
@@ -32,7 +31,7 @@ const ShortCastleCondition: MoveConditionFunction = (game: Game, pos: Position) 
     return true;
 }
 
-const LongCastleCondition: MoveConditionFunction = (game: Game, pos: Position) => {
+const LongCastleCondition: MoveConditionFunction = (game: MoveGameContext, pos: Position) => {
     const { board } = game;
     const king = board.getAtPos(pos);
     const rook = board.positionMap[pos.y][0];
@@ -49,7 +48,7 @@ const LongCastleCondition: MoveConditionFunction = (game: Game, pos: Position) =
     for(let dx = -1; dx >= -2; --dx) {
         const isKingInCheck = game.evaluateAndBacktrack(
             { from: pos, to: { x: pos.x + dx, y: pos.y } },
-            (game: Game): boolean => ChessRuleSet.isKingInCheck(game, king.color)
+            (game: MoveGameContext): boolean => ChessRuleSet.isKingInCheck(game, king.color)
         );
 
         if (isKingInCheck) return false;
@@ -58,7 +57,7 @@ const LongCastleCondition: MoveConditionFunction = (game: Game, pos: Position) =
     return true;
 }
 
-const OnShortCastle: OnMove = (game: Game, moveQuery: MoveQuery<Position>, moveRecord: MoveRecord) => {
+const OnShortCastle: OnMove = (game: MoveExecutionContext, moveQuery: MoveQuery<Position>, moveRecord: MoveRecord) => {
     const { from: startKingPos, to: endKingPos } = moveQuery;
 
     game.addMove(moveRecord, {
@@ -67,7 +66,7 @@ const OnShortCastle: OnMove = (game: Game, moveQuery: MoveQuery<Position>, moveR
     });
 }
 
-const OnLongCastle: OnMove = (game: Game, moveQuery: MoveQuery<Position>, moveRecord: MoveRecord) => {
+const OnLongCastle: OnMove = (game: MoveExecutionContext, moveQuery: MoveQuery<Position>, moveRecord: MoveRecord) => {
     const { from: startKingPos, to: endKingPos } = moveQuery;
 
     game.addMove(moveRecord, {
@@ -109,7 +108,7 @@ class King extends Piece
         return (!king.isMoved && !rook.isMoved && king.color === rook.color);
     }
 
-    public static canShortCastle(game: Game, pos: Position)
+    public static canShortCastle(game: MoveGameContext, pos: Position)
     {
         const { board } = game;
         const king = board.getAtPos(pos);
@@ -118,7 +117,7 @@ class King extends Piece
         return (checkPieceName(king, "king") && checkPieceName(rook, "rook") && King.canCastle(king, rook));
     }
 
-    public static canLongCastle(game: Game, pos: Position)
+    public static canLongCastle(game: MoveGameContext, pos: Position)
     {
         const { board } = game;
         const king = board.getAtPos(pos);

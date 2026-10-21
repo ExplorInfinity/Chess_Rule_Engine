@@ -1,4 +1,5 @@
-import type {Position, PiecePositionMap, BoardStringLayout} from "./types/index.js";
+import type {Position} from "./types/move.js";
+import type {PiecePositionMap, BoardStringLayout} from "./types/board.js";
 import {Piece, Bishop, King, Knight, Pawn, Queen, Rook, type PieceColor, type PieceColorCode, type PieceName, type PieceNameCode, type PieceLayoutCode} from "./pieces/index.js";
 import {PieceCode} from "./constants/piece.js";
 
@@ -30,7 +31,7 @@ class Board
                 if ((p1 === null && p2 !== null) || (p1 !== null && p2 === null))
                     return false;
 
-                if (p1 !== null && p2 !== null && !Piece.isSameType(p1, p2))
+                if (p1 !== null && p2 !== null && (p1.color !== p2.color || p1.name !== p2.name))
                     return false;
             }
 
@@ -111,7 +112,7 @@ class Board
         this.positionMap[pos.y][pos.x] = piece;
     }
 
-    public getAtPos(pos: Position)
+    public getAtPos(pos: Position): Piece | null
     {
         return this.positionMap[pos.y][pos.x];
     }
@@ -147,4 +148,5 @@ class Board
 }
 
 export { Board };
-export type { PiecePositionMap, BoardStringLayout, MoveChange, PromotionChange, CaptureChange, BoardChange } from './types/board.js';
+export type { PiecePositionMap, BoardStringLayout } from './types/board.js';
+export type { MoveChange, PromotionChange, CaptureChange, BoardChange } from './types/move.js';

@@ -1,11 +1,11 @@
-import {Piece, type PieceColor, type PieceName} from "../pieces/index.js";
+import type {PieceColor, PieceName, PieceLike} from "../types/piece.js";
 
-function checkPieceColorAndName(piece: Piece | null, color: PieceColor, name: PieceName): boolean
+function checkPieceColorAndName(piece: PieceLike | null, color: PieceColor, name: PieceName): boolean
 {
     return (piece !== null && piece.color === color && piece.name === name);
 }
 
-function checkPieceName<T extends PieceName>(piece: Piece | null, name: PieceName): piece is Piece & { name: T }
+function checkPieceName<T extends PieceName>(piece: PieceLike | null, name: T): piece is PieceLike & { name: T }
 {
     return (piece !== null && piece.name === name);
 }

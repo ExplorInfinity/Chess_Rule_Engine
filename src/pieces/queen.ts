@@ -1,5 +1,5 @@
 import {Piece} from "./piece.js";
-import type {Move} from "../types/index.js";
+import type {Move} from "../types/move.js";
 import type {PieceColor} from "../types/piece.js";
 
 const QueenMoves: Move[] = [

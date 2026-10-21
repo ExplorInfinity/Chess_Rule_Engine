@@ -1,7 +1,9 @@
-import {Game} from "./game.js";
 import {BOARD_SIZE} from "./constants/game.js";
 import {switchColor} from "./utils/color.js";
-import type {PieceColor, PieceName, IsValidMove, LegalPosition, Position, SoftFixedArrayGrid} from "./types/index.js";
+import type {GameContext} from "./types/game.js";
+import type {PieceColor, PieceName} from "./types/piece.js";
+import type {IsValidMove, LegalPosition, Position} from "./types/move.js";
+import type {SoftFixedArrayGrid} from "./types/util.js";
 
 type AttackGrid = SoftFixedArrayGrid<boolean, typeof BOARD_SIZE>;
 
@@ -9,7 +11,7 @@ class ChessRuleSet
 {
     private constructor() {}
 
-    private static getPiecePos(game: Game, pieceColor: PieceColor, pieceName: PieceName): Position
+    private static getPiecePos(game: Pick<GameContext, "board">, pieceColor: PieceColor, pieceName: PieceName): Position
     {
         const piecePos = game.board.findPiece(pieceColor, pieceName);
         if (!piecePos)
@@ -20,7 +22,7 @@ class ChessRuleSet
         return piecePos;
     }
 
-    private static markAttackedSquares(game: Game, piecePos: Position, attackedSquares: AttackGrid): void
+    private static markAttackedSquares(game: Pick<GameContext, "board">, piecePos: Position, attackedSquares: AttackGrid): void
     {
         const { board } = game;
         const { boardSize, positionMap } = board;
@@ -51,7 +53,7 @@ class ChessRuleSet
         }
     }
 
-    private static getAttackedSquaresByColor(game: Game, color: PieceColor): AttackGrid
+    private static getAttackedSquaresByColor(game: Pick<GameContext, "board">, color: PieceColor): AttackGrid
     {
         const { board } = game;
         const { boardSize, positionMap } = board;
@@ -66,7 +68,7 @@ class ChessRuleSet
         return attackedSquares;
     }
 
-    private static getPseudoLegalMoves(game: Game, pos: Position): LegalPosition[]
+    private static getPseudoLegalMoves(game: Pick<GameContext, "board">, pos: Position): LegalPosition[]
     {
         const { board } = game;
         const piece = board.getAtPos(pos);
@@ -101,7 +103,7 @@ class ChessRuleSet
         return pseudoLegalMoves;
     }
 
-    public static isKingInCheck(game: Game, color: PieceColor): boolean
+    public static isKingInCheck(game: Pick<GameContext, "board">, color: PieceColor): boolean
     {
         const kingPos = ChessRuleSet.getPiecePos(game, color, "king");
         const enemyAttackedSquares = ChessRuleSet.getAttackedSquaresByColor(game, switchColor(color));
@@ -109,27 +111,27 @@ class ChessRuleSet
         return enemyAttackedSquares[kingPos.y][kingPos.x];
     }
 
-    public static isCheckmated(game: Game): boolean
+    public static isCheckmated(game: GameContext): boolean
     {
         return ChessRuleSet.isKingInCheck(game, game.currentTurnColor) && !ChessRuleSet.hasPlayerAnyLegalMove(game);
     }
 
-    public static isDrawByStalemate(game: Game): boolean
+    public static isDrawByStalemate(game: GameContext): boolean
     {
         return !ChessRuleSet.isKingInCheck(game, game.currentTurnColor) && !ChessRuleSet.hasPlayerAnyLegalMove(game);
     }
 
-    public static isDrawByThreeFoldRepetition(game: Game): boolean
+    public static isDrawByThreeFoldRepetition(game: GameContext): boolean
     {
         return game.zobristUpdater.checkThreeFoldRepetition(game);
     }
 
-    public static isDrawByFiftyMoveRule(game: Game): boolean
+    public static isDrawByFiftyMoveRule(game: GameContext): boolean
     {
         return game.moveHistory.length - game.lastPawnMoveOrCaptureIndex >= 100;
     }
 
-    public static isDrawByInsufficientMaterial(game: Game): boolean
+    public static isDrawByInsufficientMaterial(game: GameContext): boolean
     {
         const pieces = game.board.getAllPieces();
 
@@ -141,7 +143,7 @@ class ChessRuleSet
         return pieces.length === 2;
     }
 
-    public static getLegalMoves(game: Game, piecePos: Position): LegalPosition[]
+    public static getLegalMoves(game: GameContext, piecePos: Position): LegalPosition[]
     {
         const pseudoLegalMoves = ChessRuleSet.getPseudoLegalMoves(game, piecePos);
 
@@ -153,7 +155,7 @@ class ChessRuleSet
             ));
     }
 
-    public static hasPlayerAnyLegalMove(game: Game): boolean
+    public static hasPlayerAnyLegalMove(game: GameContext): boolean
     {
         const { board, currentTurnColor: color } = game;
         const { boardSize } = board;
@@ -166,7 +168,7 @@ class ChessRuleSet
         return false;
     }
 
-    public static validateAsLegalMove(game: Game, from: Position, to: Position): IsValidMove
+    public static validateAsLegalMove(game: GameContext, from: Position, to: Position): IsValidMove
     {
         const legalMoves = ChessRuleSet.getLegalMoves(game, from);
         const foundMove = legalMoves.find(move => move.x === to.x && move.y === to.y);
@@ -177,7 +179,7 @@ class ChessRuleSet
         return { valid: true, move: foundMove };
     }
 
-    public static canSeeEachOther(game: Game, a: Position, b: Position)
+    public static canSeeEachOther(game: Pick<GameContext, "board">, a: Position, b: Position)
     {
         if (!game.board.isInBounds(a) || !game.board.isInBounds(b))
             return false;
@@ -202,7 +204,7 @@ class ChessRuleSet
         return true;
     }
 
-    public static isPathClear(game: Game, start: Position, end: Position)
+    public static isPathClear(game: Pick<GameContext, "board">, start: Position, end: Position)
     {
         if (!game.board.isInBounds(start) || !game.board.isInBounds(end))
             return false;

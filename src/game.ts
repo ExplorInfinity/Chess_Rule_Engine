@@ -1,14 +1,17 @@
-import {Board, BoardChange, BoardStringLayout} from "./board.js";
-import {GameStatus, GameResult, BOARD_SIZE, DefaultBoard} from "./constants/index.js";
+import {Board} from "./board.js";
+import {GameStatus, GameResult, BOARD_SIZE, DefaultBoard} from "./constants/game.js";
 import {ChessRuleSet} from "./chessRuleSet.js";
 import {King, Pawn} from "./pieces/index.js";
 import {ZobristUpdater} from "./hashing/zobristUpdater.js";
 import {CastleType} from "./constants/index.js";
 import {switchColor} from "./utils/color.js";
-import {PieceClassMap, PieceCode} from "./constants/index.js";
-import type {Position, MoveRecord, MoveQuery, MoveRemark, LegalPosition, StaticMethodsMatching} from "./types/index.js";
+import {PieceClassMap, PieceCode} from "./constants/piece.js";
+import type {BoardStringLayout} from "./types/board.js";
+import type {Position, MoveRecord, MoveQuery, MoveRemark, LegalPosition} from "./types/move.js";
+import type {StaticMethodsMatching} from "./types/util.js";
 import type {PieceColor, PieceNameCode} from "./types/piece.js";
-import type {GameOutcome, GameSpecialRights} from "./types/index.js";
+import type {GameOutcome, GameSpecialRights} from "./types/game.js";
+import type {BoardChange} from "./types/move.js";
 
 type BoardChangeOptions = {
     updateGameHash?: boolean;
@@ -143,7 +146,7 @@ class Game
             };
         }
 
-        const drawConditions: [StaticMethodsMatching<typeof ChessRuleSet, (game: Game) => boolean>, GameResult][] =
+        const drawConditions: [StaticMethodsMatching<typeof ChessRuleSet, (game: import("./types/game.js").GameContext) => boolean>, GameResult][] =
             [
                 [ChessRuleSet.isDrawByStalemate,                GameResult.STALEMATE],
                 [ChessRuleSet.isDrawByThreeFoldRepetition,      GameResult.THREE_FOLD_REPETITION],
