@@ -1,4 +1,5 @@
-import {BOARD_SIZE, Game} from "./game.js";
+import {Game} from "./game.js";
+import {BOARD_SIZE} from "./constants/game.js";
 import {switchColor} from "./utils/color.js";
 import type {PieceColor, PieceName, IsValidMove, LegalPosition, Position, SoftFixedArrayGrid} from "./types/index.js";
 

@@ -1,7 +1,7 @@
 import {Board} from "../board.js";
 import {Zobrist, type Hash} from "./zobrist.js";
-import {Game, type GameSpecialRights} from "../game.js";
-import type {MoveRecord} from "../types/index.js";
+import {Game} from "../game.js";
+import type {GameSpecialRights, MoveRecord} from "../types/index.js";
 import type {PieceColor} from "../types/piece.js";
 
 type HashMap = Map<Hash, number[]>;

@@ -1,10 +1,10 @@
 import {King, Pawn, Piece} from "../pieces/index.js";
-import {BOARD_SIZE, Game, type GameSpecialRights} from "../game.js";
-import {CastleType} from "../constants/index.js";
+import {Game} from "../game.js";
+import {BOARD_SIZE, CastleType} from "../constants/index.js";
 import {PieceType} from "../constants/piece.js";
 import {SplitMix64} from "../utils/splitMix64.js";
 import type {PieceColor} from "../types/piece.js";
-import type {Position, SoftFixedArray, SoftFixedArrayGrid} from "../types/index.js";
+import type {GameSpecialRights, Position, SoftFixedArray, SoftFixedArrayGrid} from "../types/index.js";
 
 type Hash = bigint;
 

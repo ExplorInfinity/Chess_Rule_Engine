@@ -1,6 +1,7 @@
 import {Piece} from "./piece.js";
-import {BOARD_SIZE, Game} from "../game.js";
+import {Game} from "../game.js";
 import {ChessRuleSet} from "../chessRuleSet.js";
+import {BOARD_SIZE} from "../constants/index.js";
 import {getColorMultiplier} from "../utils/color.js";
 import type {PieceColor} from "../types/piece.js";
 import type {MoveConditionFunction, Move, Position, OnMove, MoveRecord, MoveQuery} from "../types/index.js";

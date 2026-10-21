@@ -1,8 +1,8 @@
+import {Piece} from "../pieces/index.js";
+import {BOARD_SIZE} from "../constants/game.js";
 import type {PieceLayoutCode} from "./piece.js";
 import type {Position} from "./move.js";
 import type {SoftFixedArrayGrid} from "./util.js";
-import {BOARD_SIZE} from "../game.js";
-import {Piece} from "../pieces/index.js";
 
 type BoardStringLayout = SoftFixedArrayGrid<(PieceLayoutCode | null), typeof BOARD_SIZE>;
 

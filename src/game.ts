@@ -422,5 +422,3 @@ class Game
 }
 
 export { Game };
-export type { GameOutcome, GameSpecialRights } from "./types/game.js"
-export { GameStatus, GameResult, BOARD_SIZE, DefaultBoard } from "./constants/game.js";
