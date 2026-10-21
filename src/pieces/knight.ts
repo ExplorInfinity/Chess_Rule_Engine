@@ -1,6 +1,6 @@
-import type {Move} from "../types";
-import type {PieceColor} from "../types/piece";
-import {Piece} from "./piece";
+import type {Move} from "../types/index.js";
+import type {PieceColor} from "../types/piece.js";
+import {Piece} from "./piece.js";
 
 const KnightMoves: Move[] = [
     { vec: { dx:  1, dy:  2 }, isSliding: false, canAttack: true },

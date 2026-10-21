@@ -1,5 +1,5 @@
-import type {PieceName, PieceNameCode} from "../types/piece";
-import {Piece, Bishop, King, Knight, Pawn, Queen, Rook} from "../pieces";
+import type {PieceName, PieceNameCode} from "../types/piece.js";
+import {Piece, Bishop, King, Knight, Pawn, Queen, Rook} from "../pieces/index.js";
 
 const PieceType = { pawn: 0, knight: 1, bishop: 2, rook: 3, queen: 4, king: 5 } as const satisfies Record<PieceName, number>;
 const PieceMaterialValue  = { king: 0, pawn: 1, knight: 3, bishop: 3, rook: 5, queen: 9 } as const satisfies Record<PieceName, number>;

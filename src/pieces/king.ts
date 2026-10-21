@@ -1,11 +1,10 @@
-import type {Move, MoveConditionFunction, Position, OnMove, MoveRecord, MoveQuery} from "../types";
-import {Game} from "../game";
-import {ChessRuleSet} from "../chessRuleSet";
-import type {PieceColor} from "../types/piece";
-import {Piece} from "./piece";
-import type {Rook} from "./rook";
-import {checkPieceName} from "../utils/piece";
-import type {MoveChange} from "../types/board";
+import type {Move, MoveConditionFunction, Position, OnMove, MoveRecord, MoveQuery} from "../types/index.js";
+import type {Rook} from "./rook.js";
+import type {PieceColor} from "../types/piece.js";
+import {Game} from "../game.js";
+import {Piece} from "./piece.js";
+import {ChessRuleSet} from "../chessRuleSet.js";
+import {checkPieceName} from "../utils/piece.js";
 
 const ShortCastleCondition: MoveConditionFunction = (game: Game, pos: Position) => {
     const { board } = game;

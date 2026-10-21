@@ -1,7 +1,6 @@
-import {Position} from "./types";
-import type {PiecePositionMap, BoardStringLayout} from './types/board';
-import {Piece, Bishop, King, Knight, Pawn, Queen, Rook, type PieceColor, type PieceColorCode, type PieceName, type PieceNameCode, type PieceLayoutCode} from "./pieces";
-import {PieceCode} from "./constants/piece";
+import type {Position, PiecePositionMap, BoardStringLayout} from "./types/index.js";
+import {Piece, Bishop, King, Knight, Pawn, Queen, Rook, type PieceColor, type PieceColorCode, type PieceName, type PieceNameCode, type PieceLayoutCode} from "./pieces/index.js";
+import {PieceCode} from "./constants/piece.js";
 
 type PieceConstructor = new (color: PieceColor) => Piece;
 const pieceClassMap: Record<PieceNameCode, PieceConstructor> = { "P": Pawn, "N": Knight, "B": Bishop, "R": Rook, "Q": Queen, "K": King };
@@ -148,4 +147,4 @@ class Board
 }
 
 export { Board };
-export type { PiecePositionMap, BoardStringLayout, MoveChange, PromotionChange, CaptureChange, BoardChange } from './types/board';
+export type { PiecePositionMap, BoardStringLayout, MoveChange, PromotionChange, CaptureChange, BoardChange } from './types/board.js';

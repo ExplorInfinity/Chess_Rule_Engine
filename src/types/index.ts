@@ -1,3 +1,5 @@
-export type { GameOutcome, GameSpecialRights } from './game'
-export type { Position, LegalPosition, MoveVec2, MoveConditionFunction, OnMove, Move, MoveQuery, MoveRecord, MoveRemark, ValidMove, InvalidMove, IsValidMove } from './move';
-export type { SoftFixedArray, SoftFixedArrayGrid, StaticMethodsMatching } from './util';
+export * from './game.js';
+export * from './move.js';
+export * from './util.js';
+export * from './board.js';
+export * from './piece.js';

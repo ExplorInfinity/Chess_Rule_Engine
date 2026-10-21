@@ -1,6 +1,6 @@
-import type {CaptureChange, MoveChange, PromotionChange} from "./board";
-import type {PieceColor, PieceNameCode} from "./piece";
-import {Game} from "../game";
+import type {CaptureChange, MoveChange, PromotionChange} from "./board.js";
+import type {PieceColor, PieceNameCode} from "./piece.js";
+import {Game} from "../game.js";
 
 type MoveConditionFunction = (game: Game, pos: Position) => boolean;
 type OnMove = (game: Game, moveQuery: MoveQuery<Position>, moveRecord: MoveRecord) => void;

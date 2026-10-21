@@ -1,9 +1,9 @@
-import {BOARD_SIZE, Game} from "../game";
-import type {MoveConditionFunction, Move, Position, OnMove, MoveRecord, MoveQuery} from "../types";
-import {ChessRuleSet} from "../chessRuleSet";
-import {getColorMultiplier} from "../utils/color";
-import type {PieceColor} from "../types/piece";
-import {Piece} from "./piece";
+import {Piece} from "./piece.js";
+import {BOARD_SIZE, Game} from "../game.js";
+import {ChessRuleSet} from "../chessRuleSet.js";
+import {getColorMultiplier} from "../utils/color.js";
+import type {PieceColor} from "../types/piece.js";
+import type {MoveConditionFunction, Move, Position, OnMove, MoveRecord, MoveQuery} from "../types/index.js";
 
 const DoubleStepMoveCondition: MoveConditionFunction = (game: Game, pos: Position) => {
     const pawn = game.board.getAtPos(pos);

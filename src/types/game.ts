@@ -1,5 +1,5 @@
-import {GameResult, type GameStatus} from "../constants/game";
-import type {CastleType} from "../constants/castleType";
+import {GameResult} from "../constants/index.js";
+import type {GameStatus, CastleType} from "../constants/index.js";
 
 interface GameOutcome {
     status: GameStatus;

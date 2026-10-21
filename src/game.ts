@@ -1,14 +1,14 @@
-import type {Position, MoveRecord, MoveQuery, MoveRemark, LegalPosition, StaticMethodsMatching} from "./types";
-import type {PieceColor, PieceNameCode} from "./types/piece";
-import {Board, BoardChange, BoardStringLayout} from "./board";
-import {ChessRuleSet} from "./chessRuleSet";
-import {King, Pawn} from "./pieces";
-import {switchColor} from "./utils/color";
-import {GameStatus, GameResult, BOARD_SIZE, DefaultBoard} from "./constants";
-import {CastleType} from "./constants";
-import type {GameOutcome, GameSpecialRights} from "./types";
-import {ZobristUpdater} from "./hashing/zobristUpdater";
-import {PieceClassMap, PieceCode} from "./constants";
+import {Board, BoardChange, BoardStringLayout} from "./board.js";
+import {GameStatus, GameResult, BOARD_SIZE, DefaultBoard} from "./constants/index.js";
+import {ChessRuleSet} from "./chessRuleSet.js";
+import {King, Pawn} from "./pieces/index.js";
+import {ZobristUpdater} from "./hashing/zobristUpdater.js";
+import {CastleType} from "./constants/index.js";
+import {switchColor} from "./utils/color.js";
+import {PieceClassMap, PieceCode} from "./constants/index.js";
+import type {Position, MoveRecord, MoveQuery, MoveRemark, LegalPosition, StaticMethodsMatching} from "./types/index.js";
+import type {PieceColor, PieceNameCode} from "./types/piece.js";
+import type {GameOutcome, GameSpecialRights} from "./types/index.js";
 
 type BoardChangeOptions = {
     updateGameHash?: boolean;
@@ -422,5 +422,5 @@ class Game
 }
 
 export { Game };
-export type { GameOutcome, GameSpecialRights } from "./types/game"
-export { GameStatus, GameResult, BOARD_SIZE, DefaultBoard } from "./constants/game";
+export type { GameOutcome, GameSpecialRights } from "./types/game.js"
+export { GameStatus, GameResult, BOARD_SIZE, DefaultBoard } from "./constants/game.js";

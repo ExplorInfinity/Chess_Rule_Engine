@@ -1,5 +1,5 @@
-import type {PieceColor, PieceName} from "../types/piece";
-import type {Move} from "../types";
+import type {Move} from "../types/index.js";
+import type {PieceColor, PieceName} from "../types/piece.js";
 
 abstract class Piece
 {

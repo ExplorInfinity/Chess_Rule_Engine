@@ -1,3 +1,3 @@
-export * from './game';
-export * from './piece';
-export * from './castleType';
+export * from './game.js';
+export * from './piece.js';
+export * from './castleType.js';

@@ -1,7 +1,6 @@
-import {BOARD_SIZE, Game} from "./game";
-import {switchColor} from "./utils/color";
-import type {PieceColor, PieceName} from "./types/piece";
-import type {IsValidMove, LegalPosition, Position, SoftFixedArrayGrid} from "./types";
+import {BOARD_SIZE, Game} from "./game.js";
+import {switchColor} from "./utils/color.js";
+import type {PieceColor, PieceName, IsValidMove, LegalPosition, Position, SoftFixedArrayGrid} from "./types/index.js";
 
 type AttackGrid = SoftFixedArrayGrid<boolean, typeof BOARD_SIZE>;
 
