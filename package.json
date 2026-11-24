@@ -1,7 +1,7 @@
 {
-  "name": "@smothered/chess_rule_engine",
+  "name": "chess-rule-engine",
   "version": "0.1.0",
-  "description": "TypeScript chess rules engine",
+  "description": "A TypeScript chess rules engine for legal move validation and game-state management",
   "private": false,
   "type": "module",
   "main": "./dist/index.js",

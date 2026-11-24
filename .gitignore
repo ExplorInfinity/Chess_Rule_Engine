@@ -2,3 +2,5 @@
 /dist
 /testing
 /node_modules
+
+.DS_Store

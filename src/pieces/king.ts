@@ -40,7 +40,7 @@ const LongCastleCondition: MoveConditionFunction = (game: MoveGameContext, pos: 
         !checkPieceName(rook, "rook") || rook.isMoved ||
         rook.color !== king.color ||
         ChessRuleSet.isKingInCheck(game, king.color) ||
-        !ChessRuleSet.canSeeEachOther(game, pos, { x: board.boardSize-1, y: pos.y }))
+        !ChessRuleSet.canSeeEachOther(game, pos, { x: 0, y: pos.y }))
     {
         return false;
     }
